@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello mobile cam</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link rel='stylesheet' href='css/cssReset.css?v=20180927' />
+    <link rel='stylesheet' href='css/kPainter.css?v=20180927' />
+    <link rel='stylesheet' href='css/style.css?v=20180927.12' />
+</head>
+<body>
+    <div id="frame-main" class="frame-main">
+        <div class="div-figure">figure</div
+        ><div class="div-progress">progress</div
+        ><div class="div-steps">
+            <div id="div-main-step3-loading" class="div-step3-loading">load document detect module...</div
+            ><div id="div-main-step3" class="div-step3" style="display:none;">
+                <div class="div-title">
+                    <p>Please upload all pages<br>of <span>[child name]</span>'s school report</p>
+                </div>
+                <div class="div-imgsToUpl">
+                    <div id="div-tpl-imgBlock" class="div-imgBlock"><button class="btn-removeImg">x</button><div class="div-imgBorder"></div></div>
+                    <div id="div-main-addPhoto" class="div-addPhoto"><div class="div-plus"></div><div class="div-takeAPhoto">Take a photo</div></div>
+                </div>
+            </div>
+        </div>
+    </div
+    ><div id="frame-adjust" class="frame-adjust" style="display:none;">
+        <button id="btn-close-adjust" class="btn-close">
+            <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
+        </button
+        ><div id="div-painter" class="div-painter"></div
+        ><div id="div-adjust-docDetect" class="div-btnGrp"><button class="btn-back">Back</button><button class="btn-rr" style="display:none;">Rotate Right</button><button class="btn-next">Next</button></div
+        ><div id="div-adjust-confirm" class="div-btnGrp"><button class="btn-back">Back</button><button class="btn-rr" style="display:none;">Rotate Right</button><button class="btn-save">Save</button></div>
+    </div
+    ><div id="grayFog" class="grayFog" style="display:none;">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+<script src='js/jquery-3.2.1.min.js'></script>
+<script src="js/mbc-2.1.2.min.js?v=10"></script>
+<script src="js/script.js?v=20180927.7"></script>
+</body>
+</html>

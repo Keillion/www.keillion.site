@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello Keillion</title>
+	<meta charset='utf-8'>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel='stylesheet' href='/css/foundation.min.css' />
+</head>
+<body data-sticky-container>
+	<div class="title-bar" data-responsive-toggle="responsive-menu-top-bar" data-hide-for="medium">
+		<button class="menu-icon" type="button" data-toggle="responsive-menu-top-bar"></button>
+		<div class="title-bar-title">Keillion's Site</div>
+	</div>
+	<div id="responsive-menu-top-bar" class="top-bar sticky" data-sticky data-margin-top="0">
+		<div class="top-bar-left">
+			<ul class="dropdown menu" data-dropdown-menu>
+				<li class="menu-text">Keillion's Site</li>
+				<li class="has-submenu">
+					<a href="#0">HOME</a>
+					<ul class="submenu menu vertical" data-submenu>
+						<li><a href="#0">One</a></li>
+						<li><a href="#0">Two</a></li>
+						<li><a href="#0">Three</a></li>
+					</ul>
+				</li>
+				<li><a href="#0">Two</a></li>
+				<li><a href="#0">Three</a></li>
+			</ul>
+		</div>
+		<div class="top-bar-right">
+			<ul class="menu">
+				<li><input type="search" placeholder="Search"></li>
+				<li><button type="button" class="button">Search</button></li>
+				<li></li>
+			</ul>
+		</div>
+	</div>
+	<div class='grid-container'>
+		<p>Welcome to Keillion's site.</p>
+		<hr>
+		<p><a href="/mobileCam/" target="_blank">mobileCam</a></p>
+		<p><a href="/chromeExtension/sample1.html" target="_blank">chrome extension test</a></p>
+		<p><a href="/yearPartyTimer/timer.html" target="_blank">Year Party Timer</a></p>
+		<hr>
+		<p>Minecraft 1.12 is on served from around 12:00 Friday to around 24:00 Sunday (UTC) each week.</p>
+		<p>No pvp. No dig inside wattled secure zoom.</p>
+		<p>Around secure zoom you jump higher, thus you can jump over wattle without any door.</p>
+		<hr>
+		<div class="message-board">
+			<style>
+			</style>
+			message board testing...
+			<div class="message-floor">
+				<a class="message-username">userA</a> <span class="message-time">2017/11/11 13:00</span>
+				<div class="message-content">It is a new message!</div>
+				<div class="message-comments grid-x">
+					<div class="message-comment small-11 small-offset-1 cell">
+						<a class="message-username">userB</a> reply to <a class="message-replyTo">userA</a> <span class="message-time">2017/11/11 13:10</span>
+						<div class="message-content">It is a new reply!</div>
+					</div>
+					<div class="message-comment small-11 small-offset-1 cell">
+						<a class="message-username">userC</a> reply to <a class="message-replyTo">userB</a> <span class="message-time">2017/11/11 13:22</span>
+						<div class="message-content">It is a new new reply!</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<!--<p><a href="https://github.com/Keillion" target="_blank">Visit my github</a></p>-->
+		<p>Email: keillionv@gmail.com</p>
+		<hr>
+		<p>time: <span id='footer-time'></span></p>
+	</div>
+	<script src='/js/jquery-3.2.1.slim.min.js'></script>
+	<!-- <script src='/js/what-input.min.js'></script> -->
+	<script src='/js/foundation.min.js'></script>
+	<script>
+		$(document).foundation();
+	</script>
+	<script>
+		setInterval(function (argument) {
+			$('#footer-time').text((new Date()).toString());
+		},1000);
+	</script>
+</body>
+</html>

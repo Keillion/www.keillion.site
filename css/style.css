@@ -1,0 +1,5 @@
+html{background-color:#ddd;}
+body{padding:1px;}
+.wrapper{margin: 20px auto;padding:12px;max-width:1080px;box-shadow:0 0 10px #777;border:1px solid #ccc;background-color:white;line-height: 24px;}
+a{color:#40a0d0;}
+a:hover{color:#4bbaf1;}

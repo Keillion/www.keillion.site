@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello mobile cam</title>
+	<meta charset='utf-8'>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<!--<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />-->
+	<link rel='stylesheet' href='/css/cssReset.css' />
+	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/enenadioefhagdbobnlpimjfbicjfakk">
+	<!-- replace 'DCSResources/xxx.css' with "chrome-extension://'extensionId'/DCSResources/xxx.css" outside of extension -->
+	<link rel='stylesheet' href='chrome-extension://enenadioefhagdbobnlpimjfbicjfakk/DCSResources/dynamsoft.dcs.mobile.initiate.css' />
+	<link rel='stylesheet' href='sample1.css' />
+</head>
+<body>
+<div id="imgShowMdl" class="imgShowMdl">
+</div
+><div id="imgEditMdl" class="imgEditMdl" style="display:none">
+	<button id="btn-undo">undo</button>
+	<button id="btn-redo">redo</button>
+	<button id="btn-rl">rotateLeft</button>
+	<button id="btn-rr">rotateRight</button>
+	<button id="btn-mirr">mirror</button>
+	<button id="btn-crop">crop</button>
+	<br>
+	<button id="btn-save">Save</button>
+	<button id="btn-cancel">Cancel</button>
+</div
+><div id="switchImgMdl" class="switchImgMdl">
+  <p style="display:none;">Extension id: <span id="extensionId" style="font-weight:bold;"></span></p>
+	<button id="btn-first">I&lt;</button>
+	<button id="btn-previous">&lt;</button>
+	<span id="pageNum">0/0</span>
+	<button id="btn-next">&gt;</button>
+	<button id="btn-last">&gt;I</button>
+	<button id="btn-remove">del</button>
+	<button id="btn-edit">Edit</button>
+	<br>
+	<!--<button id="btn-download">download</button>-->
+</div
+><div id="addUplMdl" class="addUplMdl">
+	<ul class="setting">
+	  <li>max scan <input id="maxScanImages" style="width:20px"> image(s).</li>
+	  <li>ddc: <input id="ipt-ddcKey" placeholder="ddc restful key">.</li>
+	  <li>name: <input id="ipt-downloadName" placeholder="filename to dwonload">.</li>
+  </ul
+  ><div class="btns">
+    <button id="btn-scan">Scan</button
+  	><button id="btn-capture">Capture</button
+  	><button id="btn-fromFile">File..</button
+  	><button id="btn-barcode">Barcode</button
+  	><button id="btn-ocr">Ocr</button
+  	><button id="btn-download">Download</button>
+	</div>
+</div
+><!--<div style=""><div id="div-error" style="position:fixed;left:0;top:0;display:none;width:100%;height:100px;border:1px solid #ccc;color:red;resize:vertical;overflow-y:auto;word-wrap:break-word;background:rgba(255,255,255,0.5);">
+</div></div
+>--><div id="grayFog" class="grayFog">
+	<div class="spinner">
+		<div class="double-bounce1"></div>
+		<div class="double-bounce2"></div>
+	</div>
+</div>
+<input id="iptFile" type="file" accept="image/jpeg,image/bmp,image/png,image/gif" multiple style="display:none">
+<div id="videoMdl" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;background:black;">
+  <video id="video-camera" style="width:100%;height:100%;"></video>
+  <button id="btn-snapshot" style="position:absolute;margin:0 auto;left:0;right:0;bottom:5%;width:10vmin;height:10vmin;border:0;border-radius:5vmin;background:rgba(255,255,255,0.5);text-align:center;font-size:2vmin;">snapshot</button>
+  <button id="btn-captureClose" style="position:absolute;right:5%;bottom:5%;width:10vmin;height:10vmin;border:0;border-radius:5vmin;background:rgba(255,255,255,0.5);text-align:center;font-size:8vmin;">&times;</button>
+</div>
+<div id="div-install" style="width:400px;height:160px;margin:auto;position:fixed;left:0;top:0;right:0;bottom:0;line-height:24px;display:none;background:white;border-radius:3px;border:1px solid black;padding:16px;z-index:200;">
+	The page only support using chrome in PC and you should install <a href='https://chrome.google.com/webstore/detail/enenadioefhagdbobnlpimjfbicjfakk'>dynamsoft document processing api</a> from chrome extension store.<br>
+	<button id="btn-install" onclick="try{chrome.webstore.install('https://chrome.google.com/webstore/detail/enenadioefhagdbobnlpimjfbicjfakk',function(){alert('Success');},function(){alert('Fail. Please install manually by click link.');});}catch(ex){alert('Fail. Please install manually by click link.');}">one click install</button><br>
+	Please refresh page after installed.
+	<!-- document of one click install: https://developer.chrome.com/webstore/inline_installation -->
+	<!--<script>
+		try{if(!chrome.app.isInstalled){throw "not installed";}}catch(ex){
+			document.getElementById("div-install").style.display = "block";
+		}
+	</script>-->
+</div>
+<!-- replace 'DCSResources/xxx.js' with "chrome-extension://'extensionId'/DCSResources/xxx.js" outside of extension -->
+<script src="chrome-extension://enenadioefhagdbobnlpimjfbicjfakk/DCSResources/exif.js"></script>
+<script src="chrome-extension://enenadioefhagdbobnlpimjfbicjfakk/DCSResources/dynamsoft.dcs.mobile.initiate.js"></script>
+<script src="/js/jquery-3.2.1.slim.min.js"></script>
+<script src="/js/kConsole.js"></script>
+<script src="sample1.js"></script>
+</body>
+</html>
