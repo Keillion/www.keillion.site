@@ -1,7 +1,7 @@
 /*
  * master branch: https://github.com/Keillion/www.keillion.site Unlicense
  */
-/*global jQuery,$*/
+/*global jQuery*/
 var kUtil = kUtil || {};
 if(!Math.sign){
     Math.sign = function(num){
@@ -112,7 +112,7 @@ kUtil.copyToClipBoard = function(txt){
         textarea.style.position = 'fixed';
         textarea.style.left = '0';
         textarea.style.top = '0';
-        $(document.body).append(textarea);
+        jQuery(document.body).append(textarea);
         textarea.value = txt;
         textarea.focus();
         textarea.select();
@@ -124,7 +124,7 @@ kUtil.copyToClipBoard = function(txt){
         }catch(ex){
             alert('copy failed, info: '+(ex.message || ex));
         }
-        $(textarea).remove();
+        jQuery(textarea).remove();
     }
 };
 (function($){
