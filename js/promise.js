@@ -1,3 +1,6 @@
+/**
+ * MIT https://github.com/lahmatiy/es6-promise-polyfill
+*/
 (function(global){
 
 //

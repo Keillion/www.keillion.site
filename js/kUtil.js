@@ -1,4 +1,7 @@
-/*global $*/
+/*
+ * master branch: https://github.com/Keillion/www.keillion.site Unlicense
+ */
+/*global jQuery,$*/
 var kUtil = kUtil || {};
 if(!Math.sign){
     Math.sign = function(num){
@@ -76,7 +79,10 @@ kUtil.convertBase64ToBlob = function(base64Str, mimeType){
     var uint8Arr = new Uint8Array(byteNumArr);
     return new Blob([uint8Arr], {type: mimeType});
 };
-//author: meizz; modify: Keillion
+/**
+ * author: meizz; modify: Keillion
+ * https://blog.csdn.net/meizz/article/details/405708
+ * */
 Date.prototype.kUtilFormat = function(fmt){
     var o = {
         "M+" : this.getUTCMonth()+1,
@@ -108,23 +114,11 @@ kUtil.copyToClipBoard = function(txt){
         textarea.style.top = '0';
         $(document.body).append(textarea);
         textarea.value = txt;
-        var isIOS = navigator.userAgent.match(/ipad|iphone/i);
-        if(isIOS){
-            //ios
-            var range = document.createRange();
-            range.selectNodeContents(textarea);
-            var selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-            textarea.setSelectionRange(0, 999999);
-        }else{
-            //other
-            textarea.focus();
-            textarea.select();
-        }
+        textarea.focus();
+        textarea.select();
         try{
-            var bSuccess = document.execCommand('copy');//ios would not return true
-            if(!bSuccess && !isIOS){
+            var bSuccess = document.execCommand('copy');
+            if(!bSuccess){
                 alert('copy failed');
             }
         }catch(ex){
