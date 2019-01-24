@@ -29,3 +29,7 @@ Even work in ie6.
 ## cssReset.css [&gt;&gt;](css/cssReset.css)
 
 ## cssResetH5.css [&gt;&gt;](css/cssResetH5.css)
+
+## yearPartyTimer [&gt;&gt;](yearPartyTimer)
+
+Timer with red and snow for the year party.
