@@ -100,6 +100,25 @@ Date.prototype.kUtilFormat = function(fmt){
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
     return fmt;
 };
+/**
+ * Keillion modify from https://www.cnblogs.com/yuanke/p/4899986.html
+*/
+kUtil.getSearchObj = function(){
+    // get str after ? in url
+    var str = location.search;
+    str = str.substring(1,str.length);
+    
+    // spilt with & to get arr whose element like name=xiaoli
+    var arr = str.split("&");
+    var obj = new Object();
+    
+    // split element with = and set into obj   
+    for(var i = 0; i < arr.length; i++) {
+        var tmp_arr = arr[i].split("=");
+        obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
+    }
+    return obj;
+};
 kUtil.copyToClipBoard = function(txt){
     if(navigator.clipboard){
         navigator.clipboard.writeText(txt)['catch'](function(ex){
