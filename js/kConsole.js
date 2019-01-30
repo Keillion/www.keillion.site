@@ -40,7 +40,7 @@ self.kConsoleLog = function(anything, color){
                 };
             })());
         }catch(ex){/**/}
-        if(undefined === str){
+        if(undefined === str || '{}' === str){
             str = anything.toString();
         }
     }
