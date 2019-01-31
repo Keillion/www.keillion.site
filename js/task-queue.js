@@ -16,7 +16,7 @@ var TaskQueue = function(){
     this.timeout = 100;
 };
 
-TaskQueue.prototype.push = function(task, context, args){
+TaskQueue.prototype.push = function(task, context, args, handleReturn){
     /// <summary>
     /// Push task. If <span>!isWorking</span>, start the task queue automatically.
     /// </summary>
@@ -24,14 +24,15 @@ TaskQueue.prototype.push = function(task, context, args){
     this._queue.push({
         "task": task,
         "context": context,
-        "args": args
+        "args": args,
+        "handleReturn": handleReturn
     });
     if(!this.isWorking){
         this.next();
     }
 };
 
-TaskQueue.prototype.unshift = function(task, context, args){
+TaskQueue.prototype.unshift = function(task, context, args, handleReturn){
     /// <summary>
     /// Push task. If <span>!isWorking</span>, start the task queue automatically.
     /// </summary>
@@ -39,7 +40,8 @@ TaskQueue.prototype.unshift = function(task, context, args){
     this._queue.unshift({
         "task": task,
         "context": context,
-        "args": args
+        "args": args,
+        "handleReturn": handleReturn
     });
     if(!this.isWorking){
         this.next();
@@ -64,8 +66,12 @@ TaskQueue.prototype.next = function(){
     var task = item.task;
     var taskContext = item.context ? item.context : self;
     var taskArguments = item.args ? item.args : [];
+    var handleReturn = item.handleReturn;
     setTimeout(function(){
-        task.apply(taskContext, taskArguments);
+        var ret = task.apply(taskContext, taskArguments);
+        if(typeof handleReturn == 'function'){
+            handleReturn(ret);
+        }
     }, this.timeout);
 };
 
