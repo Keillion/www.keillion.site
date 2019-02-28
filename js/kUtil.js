@@ -133,11 +133,23 @@ kUtil.copyToClipBoard = function(txt){
         textarea.style.top = '0';
         jQuery(document.body).append(textarea);
         textarea.value = txt;
-        textarea.focus();
-        textarea.select();
+        var isIOS = navigator.userAgent.match(/ipad|iphone/i);
+        if(isIOS){
+            //ios
+            var range = document.createRange();
+            range.selectNodeContents(textarea);
+            var selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            textarea.setSelectionRange(0, 999999);
+        }else{
+            //other
+            textarea.focus();
+            textarea.select();
+        }
         try{
-            var bSuccess = document.execCommand('copy');
-            if(!bSuccess){
+            var bSuccess = document.execCommand('copy');//ios would not return true
+            if(!bSuccess && !isIOS){
                 alert('copy failed');
             }
         }catch(ex){
