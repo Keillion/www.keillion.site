@@ -64,7 +64,7 @@ TaskQueue.prototype.next = function(){
     this.isWorking = true;
     var item = this._queue.shift();
     var task = item.task;
-    var taskContext = item.context ? item.context : self;
+    var taskContext = item.context ? item.context : null;
     var taskArguments = item.args ? item.args : [];
     var handleReturn = item.handleReturn;
     setTimeout(function(){

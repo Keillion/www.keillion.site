@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+</head>
+<body>
+    <input id='theIpt' type='file' multiple accept="image/png,image/jpeg,image/bmp,image/gif,application/pdf,image/tiff" style="display:none;">
+    <div id="divResult"></div>
+<script src="https://demo.dynamsoft.com/dbr_wasm/js/dbr-6.5.0.1.min.js"></script>
+<script>
+    dynamsoft.dbrEnv.resourcesPath = 'https://demo.dynamsoft.com/dbr_wasm/js';
+    dynamsoft.dbrEnv.licenseKey = 't0068NQAAABxhryrSwCH8u6P4k0oIAV34DJsMgZTRQhXXZxI669+sn7tR3/OXMkdkGx3jduML+lx8+dvNbQ6Eeg4SN1DfqXU=';
+    dynamsoft.dbrEnv.bUseWorker = true;
+
+    let barcodeReader;
+    let theIpt = document.getElementById('theIpt');
+    self.kConsoleLog = console.log; //show debug info
+    dynamsoft.dbrEnv.onAutoLoadWasmSuccess = function(){
+        barcodeReader = new dynamsoft.BarcodeReader();
+        theIpt.style.display = '';
+    };
+
+    let divResult = document.getElementById('divResult');
+    theIpt.addEventListener('change', function(){
+        //log start
+        divResult.innerHTML = '';
+        let startP = document.createElement('p');
+        startP.innerText = '==== start ====';
+        divResult.appendChild(startP);
+        theIpt.style.display = 'none';
+
+        var decodeTask = new dynamsoft.TaskQueue();
+        for(let i = 0; i < this.files.length; ++i){
+            // add each file into decodeTask
+            decodeTask.push(function(file){
+                (() => {
+                    if(file.type == 'application/pdf'){
+                        return getCvsFromPdf(file, decodeAndShowResult);
+                    }else if(file.type == 'image/tiff'){
+                        return getCvsFromTif(file, decodeAndShowResult);
+                    }else{
+                        return decodeAndShowResult(file);
+                    }
+                })().then(()=>{
+                    decodeTask.next();
+                }, (ex)=>{
+                    console.log(ex);
+                    decodeTask.next();
+                });
+            }, null, [this.files[i]]);
+        }
+        decodeTask.push(()=>{
+            // after all decode finish, set input empty
+            this.value = '';
+            // log end
+            let p = document.createElement('p');
+            p.innerText = '==== finish ====';
+            divResult.appendChild(p);
+            theIpt.style.display = '';
+        });
+    });
+
+    var decodeAndShowResult = src => {
+        return barcodeReader.decodeFileInMemory(src).then(results => {
+            results.forEach(r => {
+                let p = document.createElement('p');
+                p.innerText = r.BarcodeText;
+                divResult.appendChild(p);
+            });
+            return Promise.resolve();
+        });
+    };
+
+    var getCvsFromTif = function(blob, handlePromise){
+        return new Promise(function(resolve, reject){
+            if(self.Tiff){
+                resolve();
+            }else{
+                console.log('loading tiff component...');
+                var script = document.createElement('script');
+                script.src = 'js/tiff.min.js';
+                self.onTiffJsLoadSuccess = function(){
+                    //initialize with 100MB for large files
+                    Tiff.initialize({
+                        TOTAL_MEMORY: 100000000
+                    });
+                    resolve();
+                };
+                script.onerror = function(ex){
+                    //tudo test it
+                    reject(script.error || ex || 'load tiff js fail');
+                };
+                document.body.appendChild(script);
+            }
+        }).then(function(){
+            console.log('parsing the tiff...');
+            return new Promise(function(resolve, reject){
+                var fr = new FileReader();
+                fr.onload = function(){
+                    resolve(fr.result);
+                };
+                fr.onerror = function(){
+                    reject(fr.error);
+                };
+                fr.readAsArrayBuffer(blob);
+            });
+        }).then(function(arrayBuffer){
+            var tiff = new Tiff({
+                buffer: arrayBuffer
+            });
+            var taskQueue = new dynamsoft.TaskQueue();
+            for (var j = 0, len = tiff.countDirectory(); j < len; ++j) {
+                taskQueue.push(function(j){
+                    tiff.setDirectory(j);
+                    handlePromise(tiff.toCanvas()).then(function(){
+                        taskQueue.next();
+                    });
+                },null,[j]);
+            }
+            return new Promise(function(resolve){
+                taskQueue.push(function(){
+                    resolve();
+                });
+            });
+        });
+    };
+
+    var getCvsFromPdf = function(blob, handlePromise){
+        return new Promise(function(resolve, reject){
+            if(self.pdfjsLib){
+                resolve();
+            }else{
+                console.log('loading pdf component...');
+                var script = document.createElement('script');
+                script.src = 'js/pdf.js';
+                self.onPdfJsLoadSuccess = function(){
+                    self.pdfjsLib = window['pdfjs-dist/build/pdf'];
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/pdf.worker.js';
+                    resolve();
+                };
+                script.onerror = function(ex){
+                    //tudo test it
+                    reject(script.error || ex || 'load pdf js fail');
+                };
+                document.body.appendChild(script);
+            }
+        }).then(function(){
+            console.log('parsing the pdf...');
+            return new Promise(function(resolve, reject){
+                var fr = new FileReader();
+                fr.onload = function(){
+                    resolve(fr.result);
+                };
+                fr.onerror = function(){
+                    reject(fr.error);
+                };
+                fr.readAsArrayBuffer(blob);
+            });
+        }).then(function(arrayBuffer){
+            return pdfjsLib.getDocument(arrayBuffer);
+        }).then(function(pdf){
+            var taskQueue = new dynamsoft.TaskQueue();
+            for(var i = 0; i < pdf.numPages; ++i){
+                taskQueue.push(function(i){
+                    //pdfjs is 1 base >_<
+                    var cvs = null;
+                    pdf.getPage(i+1).then(function(page){
+                        var viewport = page.getViewport(4); // 1 == 72dpi, 4 == 288dpi, need higher dpi when modelsize is too small, but slower
+                        cvs = document.createElement('canvas');
+                        cvs.width = viewport.width;
+                        cvs.height = viewport.height;
+
+                        var ctx = cvs.getContext('2d');
+                        return page.render({
+                            canvasContext: ctx,
+                            viewport: viewport
+                        });
+                    }).then(function(){
+                        handlePromise(cvs).then(function(){
+                            taskQueue.next();
+                        });
+                    })['catch'](function(ex){
+                        console.error(ex);
+                        taskQueue.next();
+                    });
+                }, null, [i]);
+            }
+            return new Promise(function(resolve){
+                taskQueue.push(function(){
+                    resolve();
+                });
+            });
+        });
+    };
+</script>
+</body>
+</html>

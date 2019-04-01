@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <video class="dbrVideoReader-video" playsinline="true"></video>
+<script src="https://demo.dynamsoft.com/dbr_wasm/js/dbr-6.5.0.1.min.js"></script>
+<script src="dbr.video.js"></script>
+<script>
+    dynamsoft.dbrEnv.resourcesPath = 'https://demo.dynamsoft.com/dbr_wasm/js';
+    dynamsoft.dbrEnv.licenseKey = 't0068NQAAABxhryrSwCH8u6P4k0oIAV34DJsMgZTRQhXXZxI669+sn7tR3/OXMkdkGx3jduML+lx8+dvNbQ6Eeg4SN1DfqXU=';
+    dynamsoft.dbrEnv.bUseWorker = true;
+    let videoReader = new dynamsoft.BarcodeReader.VideoReader({
+        htmlElement: document.body,
+        onFrameRead: results => {console.log(results);},
+        onDiffCodeRead: (txt, result) => {alert(txt);}
+    });
+    videoReader.read();
+</script>
+</body>
+</html>
