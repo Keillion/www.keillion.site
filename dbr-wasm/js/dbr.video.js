@@ -31,14 +31,18 @@
  *   // Runtime settings about decoding.
  *   // Refer [RuntimeSettings](https://www.dynamsoft.com/help/Barcode-Reader/struct_dynamsoft_1_1_barcode_1_1_public_runtime_settings.html).
  *   runtimeSettings: DBRPublicRuntimeSettings;
+ *   // like (video)=>{return [video, sx, sy, sWidth, sHeight, dWidth, dHeight];}
+ *   beforeDecodeVideo?: (video: HTMLVideoElement) => Promise<HTMLVideoElement || any[]>;
+ *   // like (config)=>{return config.reader.decodeVideo.apply(config.reader, config.args);}
+ *   duringDecodeVideo?: (config: VideoReaderDecodeVideoConfig) => Promise<DBRTextResult[]>;
  *   // The callback will be called after each time decoding.
  *   // Refer [TextResult](https://www.dynamsoft.com/help/Barcode-Reader/class_dynamsoft_1_1_barcode_1_1_text_result.html).
- *   onFrameRead: (results: DBRTextResult[]) => void;
+ *   onFrameRead?: (results: DBRTextResult[]) => void;
  *   // One code will be remember for `forgetTime`. After `forgetTime`, when the code comes up again, it will be regard as a new different code.
  *   forgetTime: number;
  *   // When a new different code comes up, the function will be called.
  *   // Refer [TextResult](https://www.dynamsoft.com/help/Barcode-Reader/class_dynamsoft_1_1_barcode_1_1_text_result.html).
- *   onDiffCodeRead: (txt: string, result: DBRTextResult) => void;
+ *   onDiffCodeRead?: (txt: string, result: DBRTextResult) => void;
  *   // Strat the video and read barcodes.
  *   read(): Promise<VideoReaderReadCallback>;
  *   // Change video settings during reading
@@ -57,6 +61,8 @@
  *   confidence?: number;
  *   intervalTime?: number;
  *   runtimeSettings?: DBRPublicRuntimeSettings;
+ *   beforeDecodeVideo?: (video: HTMLVideoElement) => Promise<any[]>;
+ *   duringDecodeVideo?: (config: VideoReaderDecodeVideoConfig) => Promise<DBRTextResult[]>;
  *   onFrameRead?: (results: DBRTextResult[]) => void;
  *   forgetTime?: number;
  *   onDiffCodeRead?: (txt: string, result: DBRTextResult) => void;
@@ -65,6 +71,11 @@
  * interface VideoDeviceInfo{
  *   deviceId: string;
  *   label: string;
+ * }
+ * 
+ * interface VideoReaderDecodeVideoConfig{
+ *   reader: dynamsoft.BarcodeReader,
+ *   args: any[]
  * }
  * 
  * interface VideoReaderPlayCallback{
@@ -119,6 +130,8 @@ dynamsoft.BarcodeReader.VideoReader = function(config){
         this.intervalTime = 100;
     }
     this.runtimeSettings = config.runtimeSettings || {};
+    this.beforeDecodeVideo = config.beforeDecodeVideo;
+    this.duringDecodeVideo = config.duringDecodeVideo;
     this.onFrameRead = config.onFrameRead;
     this.forgetTime = config.forgetTime;
     if(this.forgetTime == undefined){
@@ -346,14 +359,31 @@ dynamsoft.BarcodeReader.VideoReader.prototype.read = function(){
         if(self.kConsoleLog)self.kConsoleLog('======= once read =======');
     
         var timestart = (new Date()).getTime();
-        (function(){
+        Promise.all([(()=>{
             if(JSON.stringify(barcodeReader.getRuntimeSettings()) != JSON.stringify(videoReader.runtimeSettings)){
                 return barcodeReader.updateRuntimeSettings(videoReader.runtimeSettings);
             }else{
                 return Promise.resolve();
             }
-        })().then(function(){
-            return barcodeReader.decodeVideo(video);
+        })(),(()=>{
+            if(videoReader.beforeDecodeVideo){
+                return videoReader.beforeDecodeVideo(video);
+            }else{
+                return video;
+            }
+        })()]).then(function(values){
+            if(videoReader.duringDecodeVideo){
+                return videoReader.duringDecodeVideo({
+                    reader: barcodeReader,
+                    args: values[1]
+                });
+            }else{
+                var args = values[1];
+                if(!(args instanceof Array)){
+                    args = [args];
+                }
+                return barcodeReader.decodeVideo.apply(barcodeReader, args);
+            }
         }).then((results)=>{
             var timeGetResult = new Date().getTime();
             if(self.kConsoleLog)self.kConsoleLog('time cost: ' + (timeGetResult - timestart) + 'ms');
@@ -497,10 +527,10 @@ dynamsoft.BarcodeReader.VideoReader.prototype.read = function(){
             }
         }
         videoReader.runtimeSettings = runtimeSettings;
-        return Promise.all([Promise.resolve(values[1]), barcodeReader.updateRuntimeSettings(runtimeSettings)]);
+        return Promise.all([values[1], barcodeReader.updateRuntimeSettings(runtimeSettings)]);
     }).then(function(values){
         loopReadVideo();
-        return Promise.all([Promise.resolve(values[0]), updateDevice()]);
+        return Promise.all([values[0], updateDevice()]);
     }).then(function(values){
         var videoResolution = values[0];
         var videoDeviceInfos = values[1];

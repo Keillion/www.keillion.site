@@ -19,6 +19,7 @@ var divDbrResultTxtboxContainer = document.getElementById('div-dbrResultTxtbox-c
 
 var videoReader = new dynamsoft.BarcodeReader.VideoReader({
     htmlElement: document.body,
+    //confidence: 0,
     onFrameRead: function(results){
         // tudo, resize when video too big
         divCvsContainer.style.width = video.videoWidth + 'px';
@@ -120,6 +121,7 @@ var videoReader = new dynamsoft.BarcodeReader.VideoReader({
         div.dbrResultBoxTxt = txt;
         div.dbrResultBoxFormat = result.BarcodeFormat;
         divDbrResultTxtboxContainer.appendChild(div);
+        console.log(div.innerText);
     }
 });
 
