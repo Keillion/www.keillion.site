@@ -32,7 +32,8 @@
  *   // Refer [RuntimeSettings](https://www.dynamsoft.com/help/Barcode-Reader/struct_dynamsoft_1_1_barcode_1_1_public_runtime_settings.html).
  *   runtimeSettings: DBRPublicRuntimeSettings;
  *   // like (video)=>{return [video, sx, sy, sWidth, sHeight, dWidth, dHeight];}
- *   beforeDecodeVideo?: (video: HTMLVideoElement) => Promise<HTMLVideoElement || any[]>;
+ *   // also see: [drawImage](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage)
+ *   beforeDecodeVideo?: (video: HTMLVideoElement) => HTMLVideoElement || any[] || Promise<HTMLVideoElement || any[]>;
  *   // like (config)=>{return config.reader.decodeVideo.apply(config.reader, config.args);}
  *   duringDecodeVideo?: (config: VideoReaderDecodeVideoConfig) => Promise<DBRTextResult[]>;
  *   // The callback will be called after each time decoding.

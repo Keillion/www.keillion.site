@@ -144,4 +144,16 @@ let videoReader = new dynamsoft.BarcodeReader.VideoReader({
 });
 ```
 
+## Decode Part of Video
+
+```js
+videoReader.beforeDecodeVideo = (video) => {
+    // take a center part of the video and resize the part before decode
+    // also see: [drawImage](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage)
+    var vw = video.videoWidth, vh = video.videoHeight;
+    var sx = vw / 4, sy = vh / 4, sWidth = vw / 2, sHeight = vh / 2, dWidth = vw / 4, dHeight = vh / 4;
+    return [video, sx, sy, sWidth, sHeight, dWidth, dHeight];
+};
+```
+
 
