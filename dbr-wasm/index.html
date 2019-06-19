@@ -1,125 +1,385 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
-	<title>JavaScript Barcode Reader Demo (WebAssembly)</title>
     <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<link rel='stylesheet' href='css/style.css?v=20190114' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>JavaScript Barcode Reader Demo (WebAssembly)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#323232">
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/style_fresh.css">
 </head>
+
 <body>
-    <div class="frame-video">
-        <video id="dbrVideoReader-video" class="dbrVideoReader-video" playsinline="true"></video>
-    </div
-    ><div id="frame-main" class="frame-main">
-        <div id="div-canvas-container" class="div-canvas-container"></div>
-        <div id="div-dbrResultTxtbox-container" class="div-dbrResultTxtbox-container"></div>
-    </div
-    ><div id="frame-menu" class="frame-menu">
-        <div class="menu-father">
-            <p>Video Source</p>
-            <div style="display:none;">
-                <select class="dbrVideoReader-sel-camera"></select>
-            </div>
-        </div
-        ><div class="menu-father">
-            <p>Video Resolution</p>
-            <div style="display:none;">
-                <select class="dbrVideoReader-sel-resolution"></select>
-            </div>
-        </div
-        ><div class="menu-father">
-            <p>Barcodes Formats</p>
-            <div style="display:none;">
-                <label><input type="checkbox" value="1" class="ipt-barcodeFormat" checked="">CODE_39</label>
-                <label><input type="checkbox" value="2" class="ipt-barcodeFormat" checked="">CODE_128</label>
-                <label><input type="checkbox" value="4" class="ipt-barcodeFormat" checked="">CODE_93</label>
-                <label><input type="checkbox" value="8" class="ipt-barcodeFormat" checked="">CODABAR</label>
-                <label><input type="checkbox" value="0x10" class="ipt-barcodeFormat" checked="">ITF</label>
-                <label><input type="checkbox" value="0x20" class="ipt-barcodeFormat" checked="">EAN_13</label>
-                <label><input type="checkbox" value="0x40" class="ipt-barcodeFormat" checked="">EAN_8</label>
-                <label><input type="checkbox" value="0x80" class="ipt-barcodeFormat" checked="">UPC_A</label>
-                <label><input type="checkbox" value="0x100" class="ipt-barcodeFormat" checked="">UPC_E</label>
-                <label><input type="checkbox" value="0x200" class="ipt-barcodeFormat" checked="">INDUSTRIAL_25</label
-                ><label><input type="checkbox" value="0x2000000" type="radio" class="ipt-barcodeFormat" checked=""> PDF 417</label
-                ><label><input type="checkbox" value="0x4000000" type="radio" class="ipt-barcodeFormat" checked=""> QR Code</label
-                ><label><input type="checkbox" value="0x8000000" type="radio" class="ipt-barcodeFormat" checked=""> DataMatrix</label
-                ><label><input type="checkbox" value="0x10000000" type="radio" class="ipt-barcodeFormat" checked=""> Aztec</label>
-            </div>
-        </div
-        ><div class="menu-father">
-            <p>Reading interval</p>
-            <div style="display:none;">
-                <label><input value='2000' type="radio" class="rd-interval" name="rd-interval">2s</label
-                ><label><input value='1000' type="radio" class="rd-interval" name="rd-interval">1s</label
-                ><label><input value='500' type="radio" class="rd-interval" name="rd-interval">0.5s</a></label
-                ><label><input value='200' type="radio" class="rd-interval" name="rd-interval">0.2s</a></label
-                ><label><input value='100' type="radio" class="rd-interval" name="rd-interval" checked>0.1s</a></label
-                ><label><input value='50' type="radio" class="rd-interval" name="rd-interval">50ms</a></label
-                ><label><input value='25' type="radio" class="rd-interval" name="rd-interval">25ms</a></label
-                ><label><input value='10' type="radio" class="rd-interval" name="rd-interval">10ms</a></label>
-            </div>
-        </div
-        ><div class="menu-father">
-            <p>About Dynamsoft</p>
-            <div style="display:none;">
-                Founded in Sep 2003 with the aim of being the dynamic center of software developers,
-                Dynamsoft provides enterprise-class version control software,
-                TWAIN software development kits (SDK) and other document imaging SDKs,
-                with numerous generations for each product.
-                Today many Fortune 500 Companies including HP, IBM, Intel,
-                and Siemens trust Dynamsoft solutions for version control and TWAIN scanning SDK development.
-                <a href="https://www.dynamsoft.com/Company/Contact.aspx" target="_blank">Contact Us</a>
-            </div>
-        </div
-        >
-    </div
-    ><div id="frame-loadingAnimation" class="frame-loadingAnimation" style="display:none;"></div
-    ><div id="frame-supportAndSetting" class="frame-supportAndSetting">
-        <p><a href="https://www.dynamsoft.com/Products/barcode-recognition-javascript.aspx" target="_blank">Dynamsoft Barcode Reader JavaScript Edition</a> is a JavaScript API for barcode scanning based on the WebAssembly technology. This demo supports scanning barcodes directly from a live video stream.</p>
-        <table>
-            <thead>Supported Browsers for Desktop</thead>
-            <tr><td>Chrome</td><td>v57</td></tr>
-            <tr><td>Edge</td><td>v16</td></tr>
-            <tr><td>Firefox</td><td>v52</td></tr>
-            <tr><td>Safari</td><td>v11<a href="https://bugs.webkit.org/show_bug.cgi?id=181781" target="_blank">*</a></td></tr>
-            <tr><td>Internet Explorer</td><td>No</td></tr>
-        </table>
-        <table>
-            <thead>Supported Browsers for Mobile</thead>
-            <tr><td>Chrome for Android</td><td>v57</td></tr>
-            <tr><td>Edge</td><td>Able<a href="https://nokiapoweruser.com/enabling-experimental-features-of-edge-spartan-browser-on-windows-10-mobile-changelog/" target="_blank">*</a></td></tr>
-            <tr><td>Firefox for Android</td><td>v52</td></tr>
-            <tr><td>Safari</td><td>v11<a href="https://bugs.webkit.org/show_bug.cgi?id=181781" target="_blank">*</a></td></tr>
-            <tr><td>Android Webview</td><td>v57</td></tr>
-        </table>
-        <hr>
-        <p>To experience the scanner in the browser, please choose a barcode format(s) below:</p>
-        <div class="div-format">
-            <label><input value="0x3ff" type="checkbox" autocomplete="off" class="cb-preBarcodeFormat"> 1D</label>
-            <label><input value="0x2000000" type="checkbox" autocomplete="off" class="cb-preBarcodeFormat"> PDF 417</label>
-            <label><input value="0x4000000" type="checkbox" autocomplete="off" class="cb-preBarcodeFormat"> QR Code</label>
-            <label><input value="0x8000000" type="checkbox" autocomplete="off" class="cb-preBarcodeFormat"> DataMatrix</label>
-            <label><input value="0x10000000" type="checkbox" autocomplete="off" class="cb-preBarcodeFormat"> Aztec</label>
+    <div class="header">
+        <a href="https://www.dynamsoft.com" target="_blank" class="h-dynamsoft-logo"><img src="img/logo-dynamsoft-blackBg-190x47.png"></a
+        ><div class="header-divide"></div
+        ><a href="https://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx" target="_blank" class="dbr-logo-link"><img src="img/logo-dbr-88x88.png"></a>
+        <div class="h-center">
+            <a href="https://www.dynamsoft.com/CustomerPortal/LoginOrRegister.aspx?op=4DD608F3803493E4&product=8BC841D35BACD076" class="h-sign-in yellow-button" target="_blank">Sign Up for Trial</a>
+            <a href="https://www.dynamsoft.com/CustomerPortal/LoginOrRegister.aspx?op=4DD608F3803493E4&product=8BC841D35BACD076" class="h-sign-in-mobile" target="_blank">
+                <img src="./img/icon-login.png">
+            </a>
         </div>
-        <button id="btn-processSupportAndSettings" class="btn-processSupportAndSettings" disabled="disabled"><span class="sp-continue">Continue</span><span class="sp-needCheckFormat">Need to Check Format(s)</span></button>
-    </div
-    ><div id="frame-white" class="frame-white"></div>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    </div>
 
-    <!-- <script src="https://static.keillion.site/dbr-6.4.1.3.min.js"></script> -->
-    <script src="js/dbr-6.5.0.1.min.js"></script>
+    <!-- content -->
+    <div class="content">
+        <!-- picker -->
+        <div class="picker" id="Picker">
+            <div class="p-frame">
+                <video class="dbrScanner-video" id="PVideo" playsinline="true" muted="muted"></video>
+            </div>
+            <div class="p-frame">
+                <div id="canvasContainer" class="canvas-container"></div>
+                
+            </div>
+            <div class="p-frame">
+                <div class="scanning-container">
+                    <div class="sc-frame1"></div>
+                </div>
+                <!-- scanning resluts  -->
+                <div id="resultContainer" class="result-container"></div>
+            </div>
+        </div>
+        <!-- waiting ui-->
+        <div class="waiting">
+            <div class="w-loop-ui">
+                <div class="circle1">
+                    <div class="loop-sector">
+                        <div class="sector"></div>
+                        <div class="sector"></div>
+                        <div class="sector"></div>
+                    </div>
+                    <div class="circle2"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <div class="w-info1">Accessing Camera list...</div>
+            <div class="w-info2">Please wait a few seconds. The page is trying to load the camera list. </div>
+            <div class="w-info3">Please wait a few seconds. </div><div class="w-info3">The page is trying to load the camera list. </div>
+        </div>
+        <!-- support ui -->
+        <div class="start" id="notSupport">
+            <img src="./img/icon-warning.png">
+            <p>Unfortunately, the current browser is not supported.</p>
+            <p>Please see the supported browser information.</p>
+            <input type="checkbox" autocomplete="off" id="sptMobile">
+            <label class="t-title" for="sptMobile">Supported Browsers for Mobile</label>
+            <table id="tMobile"><tbody>
+                <tr class="t-body-white">
+                    <td>Chrome for Andriod</td><td>v61+</td>
+                </tr>
+                <tr class="t-body-black">
+                    <td>Edge</td><td>Able<a href="https://nokiapoweruser.com/enabling-experimental-features-of-edge-spartan-browser-on-windows-10-mobile-changelog/" target="_blank">*</a></td>
+                </tr>
+                <tr class="t-body-white">
+                    <td>Firefox for Android</td><td>v58+</td>
+                </tr>
+                <tr class="t-body-black">
+                    <td>Safari</td><td>v11+<a href="https://bugs.webkit.org/show_bug.cgi?id=181781" target="_blank">*</a></td>
+                </tr>
+                <tr class="t-body-white">
+                    <td>Andriod Webview</td><td>v61+</td>
+                </tr>
+            </tbody></table>
+            <input type="checkbox" autocomplete="off" id="sptDesktop">
+            <label class="t-title" for="sptDesktop">Supported Browsers for Desktop</label>
+            <table id="tDesktop"><tbody>
+                <tr class="t-body-white">
+                    <td>Chrome</td><td>v61+</td>
+                </tr>
+                <tr class="t-body-black">
+                    <td>Edge</td><td>v16+</td>
+                </tr>
+                <tr class="t-body-white">
+                    <td>Firefox</td><td>v58+</td>
+                </tr>
+                <tr class="t-body-black">
+                    <td>Safari</td><td>v11+<a href="https://bugs.webkit.org/show_bug.cgi?id=181781" target="_blank">*</a></td>
+                </tr>
+                <tr class="t-body-white">
+                    <td>Internet Explorer</td><td>No</td>
+                </tr>
+            </tbody></table>
+        </div>
+        <!-- start ui -->
+        <div class="start" id="noCam">
+            <img src="./img/icon-warning.png">
+            <img src="./img/icon-camera.png">
+            <div class="s-info">No camera available</div>
+        </div>
 
+        <!-- settings button -->
+        <input type="checkbox" id="MMenu" style="display:none">
+        <label class="menu" for="MMenu"></label>
+
+        <!-- mobile full region button -->
+        <input type="checkbox" id="MRegion" autocomplete="off">
+        <label class="m-region" for="MRegion"></label>
+
+        <!-- left bar -->
+        <div class="leftbar hidden" id="leftbar">
+            <input type="radio" autocomplete="off" name="lItem" value="itemSource" id="LSource">
+            <label class="l-item" for="LSource">Video Source</label>
+            <input type="radio" autocomplete="off" name="lItem" value="itemResolution" id="LResolution">
+            <label class="l-item" for="LResolution">Video Resolution</label>
+            <input type="radio" autocomplete="off" name="lItem" value="itemFormats" id="LFormats">
+            <label class="l-item" for="LFormats">Barcode Formats</label>
+            <input type="radio" autocomplete="off" name="lItem" value="itemSettings" id="LSettings">
+            <label class="l-item" for="LSettings">Scan Settings</label>
+            <input type="radio" autocomplete="off" name="lItem" value="itemAbout" id="LAbout">
+            <label class="l-item" for="LAbout">About Dynamsoft</label>
+            <div class="l-region">Read Full Region
+                <input type="checkbox" id="LRegion" autocomplete="off" style="display:none">
+                <label for="LRegion" class="switch-btn"></label>
+            </div>
+            <!-- video source secondary -->
+            <div class="l-secondary" id="SSource">
+                <div class="ls-title">Source</div>
+                <div class="ls-body">
+                    <!-- video source device -->
+                </div>
+            </div>
+            <!-- video resolution secondary -->
+            <div class="l-secondary" id="SResolution">
+                <div class="ls-title">Resolution</div>
+                <div class="ls-body">
+                    <!-- desktop resolution -->
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r0" data-width='3840' data-height='2160'>
+                        <label for="r0" class="radio-btn"></label><label for="r0">3840 × 2160</label>
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r1" data-width='2560' data-height='1440'>
+                        <label for="r1" class="radio-btn"></label><label for="r1">2560 × 1440</label>
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r2" data-width='1920' data-height='1080'>
+                        <label for="r2" class="radio-btn"></label><label for="r2">1920 × 1080</label>
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r3" data-width='1600' data-height='1200'>
+                        <label for="r3" class="radio-btn"></label><label for="r3">1600 × 1200</label>
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r4" data-width='1280' data-height='720'>
+                        <label for="r4" class="radio-btn"></label> <label for="r4">1280 × 720</label>
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r5" data-width='800' data-height='600'>
+                        <label for="r5" class="radio-btn"></label><label for="r5">800 × 600</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r6" data-width='640' data-height='480'>
+                        <label for="r6" class="radio-btn"></label><label for="r6">640 × 480</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="resolution" id="r7" data-width='640' data-height='360'>
+                        <label for="r7" class="radio-btn"></label><label for="r7">640 × 360</label>
+                    </div>
+                    <!-- mobile resolution -->
+                    <div class="ls-current-res">
+                        <span>Current Resolution: </span>
+                        <span id="cResolution"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- barcode formats secondary -->
+            <div class="l-secondary" id="SFormats">
+                <div class="ls-title-mobile">Formats</div>
+                <div class="ls-title-option ">
+                    <input type="checkbox" name="format" value="0x3FF" id="s1D10">
+                    <label for="s1D10" class="checkbox-btn"></label><label for="s1D10">1D Barcodes</label> 
+                </div>
+                <div class="ls-body">
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="1" id="s1D0">
+                        <label for="s1D0" class="checkbox-btn"></label><label for="s1D0">CODE_39</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="2" id="s1D1">
+                        <label for="s1D1" class="checkbox-btn"></label><label for="s1D1">CODE_128</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="4" id="s1D2">
+                        <label for="s1D2" class="checkbox-btn"></label><label for="s1D2">CODE_93</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="8" id="s1D3">
+                        <label for="s1D3" class="checkbox-btn"></label><label for="s1D3">CODABAR</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="0x10" id="s1D4">
+                        <label for="s1D4" class="checkbox-btn"></label><label for="s1D4">ITF</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="0x20" id="s1D5">
+                        <label for="s1D5" class="checkbox-btn"></label><label for="s1D5">EAN_13</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="0x40" id="s1D6">
+                        <label for="s1D6" class="checkbox-btn"></label><label for="s1D6">EAN_8</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="0x80" id="s1D7">
+                        <label for="s1D7" class="checkbox-btn"></label><label for="s1D7">UPC_A</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="0x100" id="s1D8">
+                        <label for="s1D8" class="checkbox-btn"></label><label for="s1D8">UPC_E</label> 
+                    </div>
+                    <div class="ls-option ls-option-1d">
+                        <input type="checkbox" name="format" value="0x200" id="s1D9">
+                        <label for="s1D9" class="checkbox-btn"></label><label for="s1D9">Industrial_25</label> 
+                    </div>
+                </div>
+                <!-- leftbar secondary divide -->
+                <div class="ls-divide"></div>
+                <div class="ls-title-option ls-title-option-2d">
+                    <input type="checkbox" name="format" value="0x1e000000" id="s2D4">
+                    <label for="s2D4" class="checkbox-btn"></label><label for="s2D4">2D Barcodes</label> 
+                </div>
+                <div class="ls-body">
+                    <div class="ls-option ls-option-2d">
+                        <input type="checkbox" name="format" value="0x2000000" id="s2D0">
+                        <label for="s2D0" class="checkbox-btn"></label><label for="s2D0">PDF_417</label> 
+                    </div>
+                    <div class="ls-option ls-option-2d">
+                        <input type="checkbox" name="format" value="0x4000000" id="s2D1">
+                        <label for="s2D1" class="checkbox-btn"></label><label for="s2D1">QR_CODE</label> 
+                    </div>
+                    <div class="ls-option ls-option-2d">
+                        <input type="checkbox" name="format" value="0x8000000" id="s2D2">
+                        <label for="s2D2" class="checkbox-btn"></label><label for="s2D2">DataMatrix</label> 
+                    </div>
+                    <div class="ls-option ls-option-2d">
+                        <input type="checkbox" name="format" value="0x10000000" id="s2D3">
+                        <label for="s2D3" class="checkbox-btn"></label><label for="s2D3">Aztec Code</label> 
+                    </div>
+                </div>
+            </div>
+            <!-- scan settings secondary -->
+            <div class="l-secondary" id="SSettings">
+                <div class="ls-title">Reading Interval</div>
+                <div class="ls-body ls-interval-mobile">
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=10 id="sI0">
+                        <label for="sI0" class="radio-btn"></label><label for="sI0">10ms</label>
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=25 id="sI1">
+                        <label for="sI1" class="radio-btn"></label><label for="sI1">25ms</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=50 id="sI2">
+                        <label for="sI2" class="radio-btn"></label><label for="sI2">50ms</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=100 id="sI3">
+                        <label for="sI3" class="radio-btn"></label><label for="sI3">0.1s</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=200 id="sI4">
+                        <label for="sI4" class="radio-btn"></label><label for="sI4">0.2s</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=500 id="sI5">
+                        <label for="sI5" class="radio-btn"></label><label for="sI5">0.5s</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=1000 id="sI6">
+                        <label for="sI6" class="radio-btn"></label><label for="sI6">1s</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingInterval" value=2000 id="sI7">
+                        <label for="sI7" class="radio-btn"></label><label for="sI7">2s</label> 
+                    </div>
+                </div>
+                <div class="ls-divide"></div>
+                <div class="ls-title">Mode</div>
+                <div class="ls-body">
+                    <div class="ls-option">
+                        <input type="radio" name="settingMode" value="fast" id="sM0">
+                        <label for="sM0" class="radio-btn"></label><label for="sM0">Fast</label> 
+                    </div>
+                    <div class="ls-option">
+                        <input type="radio" name="settingMode" value="accurate" id="sM1">
+                        <label for="sM1" class="radio-btn"></label><label for="sM1">Most Accurate</label> 
+                    </div>
+                    <div class="ls-clear yellow-button" id="clearCache">Clear Cache</div>
+                </div>
+            </div>
+            <!-- about dynamsoft secondary -->
+            <div class="l-secondary" id="SAbout">
+                <div class="ls-title">About</div>
+                <div class="ls-body">
+                    <p>Founded in Sep 2003 with the aim of being the dynamic center of software developers, 
+                        Dynamsoft provides enterprise-class document capture and image processing software 
+                        development kits (SDK), with numerous generations for each product. Today many Fortune 
+                        500 Companies including HP, IBM, Intel, and Siemens trust Dynamsoft solutions.
+                    </p>
+                    <a href="https://www.dynamsoft.com/Company/Contact.aspx" target="_blank">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div class="footer">  
+        <div class="f-center">
+            <a href="https://www.dynamsoft.com" target="_blank" class="f-dynamsoft-logo">
+                <img src="img/logo-dynamsoft-blackBg-190x47.png"></a>
+            <div class="f-divide"></div>
+            <div class="f-text">© 2003–2019 Dynamsoft. All rights reserved. 
+                <a href="https://www.dynamsoft.com/PrivacyStatement.aspx" target="_blank">Privacy Statement </a
+                    > /<a href="https://www.dynamsoft.com/SiteMap.html" target="_blank"> Site Map </a
+                    > /<a href="https://www.dynamsoft.com/Support/Support.aspx" target="_blank"> Support </a>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         var detectArrowFunc = ()=>{};
     </script>
+    <script src="./js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript">
-        if(!window.detectArrowFunc){
-            // not support arrow func, can't uunderstand script.js
-            alert('This demo does not support this browser.');
+        var bPC = !navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
+        var bMobileSafari = /Safari/.test(navigator.userAgent) && /iPhone/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+        // var bIE = /MSIE/.test(navigator.userAgent) || /Trident/.test(navigator.userAgent) || /RV/.test(navigator.userAgent);
+        // support mobile
+        $('#sptMobile').change(function(){
+            this.checked?$('#tMobile').show():$('#tMobile').hide()
+        });
+        // support desktop
+        $('#sptDesktop').change(function(){
+            this.checked?$('#tDesktop').show():$('#tDesktop').hide()
+        });
+        
+        if(bPC){
+            $('#sptDesktop').prop('checked',true);
+            $('#tDesktop').show();
         }
+        if(!bPC){
+            $('#sptMobile').prop('checked',true);
+            $('#tMobile').show();
+        }
+        if(!window.detectArrowFunc){
+            // not support arrow func, can't understand script.js
+            $('.waiting').fadeOut(300);
+            $('#notSupport').fadeIn(300);
+        }
+        if (bMobileSafari) {
+            $('body').css('cursor', 'pointer');
+        }
+        
     </script>
-    
-    <script src="js/dbr.video.js?v=20190402"></script>
-    <script src="js/script.js?v=20190314.1"></script>
+    <script src='https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode/dist/dbr.min.js?v=20190608' data-licensekey="f0068MgAAAG3f4LXc97QLoMBnDNamTcp2+W9GlM5Nc6RTLrb2CDDJPQ2Q/h0o9L20AsnQoYAA/der4d5qyA1ufbWnuPvwXvQ="></script>
+    <script src="./js/script_fresh.js?v=20190613.1"></script>
+    <script src="./js/ringBell.js"></script>
 </body>
+
 </html>

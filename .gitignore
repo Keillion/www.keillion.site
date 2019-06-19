@@ -3,3 +3,5 @@ kpainter
 upload-homework
 ignoreTemp
 *.zip
+dbr.wasm.cdn
+dbr-wasm
