@@ -4,7 +4,7 @@
     cvs.width = video.videoWidth;
     cvs.height = video.videoHeight;
     let ctx = cvs.getContext('2d');
-    ctx.drawImage(cvs,0,0);
+    ctx.drawImage(video,0,0);
     cvs.toBlob(blob => {
         let a = document.createElement('a');
         a.target='_blank';
