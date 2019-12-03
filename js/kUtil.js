@@ -191,6 +191,7 @@ kUtil.copyToClipBoard = function(txt){
     }
 };
 (function($){
+    if(!$)return;
     $.fn.borderWidth = function(){
         var cs = null;
         if(window.getComputedStyle){
