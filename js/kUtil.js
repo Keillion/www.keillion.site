@@ -100,6 +100,38 @@ Date.prototype.kUtilFormat = function(fmt){
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
     return fmt;
 };
+kUtil.getTimeStampFromStr = function(yyyyMMddHHmmss, timeZone){// or yyyyMMdd
+    var year = parseInt(yyyyMMddHHmmss.substring(0,4));
+    var month = parseInt(yyyyMMddHHmmss.substring(4,6)) - 1;
+    var date = parseInt(yyyyMMddHHmmss.substring(6,8));
+    var hours, minutes, secords;
+    if(yyyyMMddHHmmss.length === 14){
+        hours = parseInt(yyyyMMddHHmmss.substring(8,10));
+        minutes = parseInt(yyyyMMddHHmmss.substring(10,12));
+        secords = parseInt(yyyyMMddHHmmss.substring(12,14));
+    }
+    timeZone = timeZone || 0;
+    return new Date(Date.UTC(year, month, date, hours, minutes, secords) - timeZone * 60 * 1000);
+};
+kUtil.getStrFromTimeStamp = function(timeStamp, fmt, timeZone){
+    timeZone = timeZone || 0;
+    var date = new Date(timeStamp + timeZone * 60 * 1000);
+    var o = {
+        "M+" : date.getUTCMonth()+1,
+        "d+" : date.getUTCDate(),
+        "h+" : date.getUTCHours(),
+        "m+" : date.getUTCMinutes(),
+        "s+" : date.getUTCSeconds(),
+        "q+" : Math.floor((date.getUTCMonth()+3)/3),
+        "S"  : date.getUTCMilliseconds()
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (date.getUTCFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+};
 /**
  * Keillion modify from https://www.cnblogs.com/yuanke/p/4899986.html
 */
