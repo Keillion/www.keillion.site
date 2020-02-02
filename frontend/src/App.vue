@@ -43,7 +43,7 @@
         this.bShowMeau = false;
       },
       onSearch(value) {
-        console.log(value);
+        //console.log(value);
       }
     }
   }
