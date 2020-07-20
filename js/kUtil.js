@@ -87,7 +87,8 @@ Date.prototype.kUtilFormat = function(fmt){
     var o = {
         "M+" : this.getUTCMonth()+1,
         "d+" : this.getUTCDate(),
-        "h+" : this.getUTCHours(),
+        "H+" : this.getUTCHours(),
+        "h+" : this.getUTCHours()%12 || 12,
         "m+" : this.getUTCMinutes(),
         "s+" : this.getUTCSeconds(),
         "q+" : Math.floor((this.getUTCMonth()+3)/3),
