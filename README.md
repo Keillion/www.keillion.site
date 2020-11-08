@@ -1,7 +1,5 @@
 # www.keillion.site
 
-Now v1.
-
 You can get old resource:
 
 > kConsole.js
