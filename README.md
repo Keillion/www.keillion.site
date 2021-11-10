@@ -14,4 +14,4 @@ You can get old resource:
 >
 > yearPartyTimer
 
-from [v0 barnch](https://github.com/Keillion/www.keillion.site/tree/v0). 
+from [v0 branch](https://github.com/Keillion/www.keillion.site/tree/v0). 
