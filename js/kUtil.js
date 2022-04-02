@@ -95,7 +95,7 @@ Date.prototype.kUtilFormat = function(fmt){
         "S+"  : this.getUTCMilliseconds()
     };
     if(/(y+)/.test(fmt))
-        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        fmt=fmt.replace(RegExp.$1, (this.getUTCFullYear()+"").substr(4 - RegExp.$1.length));
     for(var k in o)
         if(new RegExp("("+ k +")").test(fmt))
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("000"+ o[k]).substr(("000"+ o[k]).length - RegExp.$1.length)));
